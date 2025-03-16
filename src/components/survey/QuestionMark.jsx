@@ -1,8 +1,16 @@
-export default function QuestionMark({ helpText, onHelpClick }) {
+/**
+ * QuestionMark Component
+ * 
+ * This component renders a question mark icon that shows help information when clicked.
+ * When clicked, it updates the tooltip content in the sidebar.
+ * 
+ * @param {Function} onClick - Callback function when the question mark is clicked
+ */
+export default function QuestionMark({ onClick }) {
   return (
     <button
       type="button"
-      onClick={() => onHelpClick(helpText)}
+      onClick={onClick}
       className="ml-2 shrink-0 rounded-full bg-white/20 text-xs text-white hover:bg-white/30"
       style={{ 
         width: '16px', 
@@ -12,6 +20,7 @@ export default function QuestionMark({ helpText, onHelpClick }) {
         justifyContent: 'center',
         transform: 'translateY(-1px)'
       }}
+      aria-label="Help"
     >
       ?
     </button>

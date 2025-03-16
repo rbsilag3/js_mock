@@ -11,6 +11,7 @@
  * @param {number} completionStats.completedQuestions - Number of questions that have been answered
  * @param {string} activeSection - ID of the currently active section
  * @param {Function} onSectionClick - Callback function when a section is clicked
+ * @param {Function} onClose - Callback function to close the sidebar on mobile
  */
 import DonutChart from './survey/DonutChart';
 
@@ -18,10 +19,22 @@ export default function SideNavigation({
   sections, 
   completionStats, 
   activeSection, 
-  onSectionClick 
+  onSectionClick,
+  onClose
 }) {
   return (
-    <aside className="w-64 bg-[#1a1744] p-4 pt-20 shadow-lg flex flex-col justify-between">
+    <aside className="w-full md:w-64 bg-[#1a1744] p-4 pt-16 md:pt-20 shadow-lg flex flex-col justify-between h-full overflow-y-auto">
+      {/* Mobile close button - only visible on mobile */}
+      <button 
+        className="md:hidden absolute top-4 right-4 text-white"
+        onClick={onClose}
+        aria-label="Close menu"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      
       <div>
         {/* Title for the sidebar navigation */}
         <div className="mb-4 text-xl font-bold text-white">Framework Domains</div>

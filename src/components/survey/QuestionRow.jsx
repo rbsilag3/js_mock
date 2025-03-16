@@ -1,29 +1,47 @@
-import QuestionMark from './QuestionMark';
+/**
+ * QuestionRow Component
+ * 
+ * This component renders a single question row in the survey table.
+ * It includes the question text, radio buttons for Likert scale, and a comments field.
+ * 
+ * @param {Object} question - The question object with id, text, and helpText
+ * @param {Function} onHelpClick - Callback function when help icon is clicked
+ * @param {Function} onRadioChange - Callback function when a radio button is changed
+ */
 import RadioGroup from './RadioGroup';
+import QuestionMark from './QuestionMark';
 
 export default function QuestionRow({ question, onHelpClick, onRadioChange }) {
+  // Likert scale options (1-5)
+  const options = ['1', '2', '3', '4', '5'];
+  
   return (
     <tr className="border-b border-white/10">
-      {/* Question text and help icon */}
-      <td className="py-4 pr-4 text-white">
-        <div className="flex items-baseline gap-2">
-          <span className="flex-1">{question.text}</span>
-          <QuestionMark helpText={question.helpText} onHelpClick={onHelpClick} />
+      {/* Question text with optional help icon */}
+      <td className="py-4 pr-4">
+        <div className="flex items-start">
+          <span className="text-white">{question.text}</span>
+          {question.helpText && (
+            <QuestionMark onClick={() => onHelpClick(question.helpText)} />
+          )}
         </div>
       </td>
+      
       {/* Radio button group for Likert scale */}
-      <RadioGroup 
-        name={question.id} 
-        onChange={(name, value) => onRadioChange(name, value)}
-      />
-      {/* Comment field for additional feedback */}
+      <td colSpan={5} className="py-4">
+        <RadioGroup 
+          name={question.id}
+          options={options}
+          onChange={(value) => onRadioChange(question.id, value)}
+        />
+      </td>
+      
+      {/* Comments text area */}
       <td className="py-4 pl-4">
         <textarea
           id={`${question.id}-comment`}
-          name={`${question.id}-comment`}
-          rows={2}
-          className="w-full resize-none rounded-lg border border-gray-600 bg-white/5 p-2.5 text-white placeholder-gray-400"
-          placeholder="Additional comments..."
+          className="h-10 w-full rounded bg-white/10 p-2 text-sm text-white placeholder-white/50 resize-none"
+          placeholder="Optional comments"
         />
       </td>
     </tr>

@@ -1,3 +1,5 @@
+//AI generated code. Modify as needed. Including the webpart.js file. 
+
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';

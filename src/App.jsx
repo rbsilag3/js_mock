@@ -17,8 +17,14 @@ export default function App(props) {
   // State for managing the help tooltip message
   const [tooltipMessage, setTooltipMessage] = useState("Select a question mark icon to see help information");
   
+  // State for tracking if the mobile tooltip is visible
+  const [isMobileTooltipVisible, setIsMobileTooltipVisible] = useState(false);
+  
   // State for tracking form submission status
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // State for mobile sidebar visibility
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   // Use the custom hook to manage survey form state
   const { 
@@ -96,28 +102,57 @@ export default function App(props) {
     }
   };
 
+  // Toggle sidebar visibility for mobile view
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  // Close sidebar when a section is selected (mobile only)
+  const handleSectionClick = (sectionId) => {
+    setActiveSection(sectionId);
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  // Handle help icon click
+  const handleHelpClick = (message) => {
+    setTooltipMessage(message);
+    setIsMobileTooltipVisible(true);
+  };
+
+  // Close mobile tooltip
+  const closeMobileTooltip = () => {
+    setIsMobileTooltipVisible(false);
+  };
+
   return (
-    <div className="flex h-screen">
-      {/* Sidebar navigation showing sections and completion status */}
-      <SideNavigation 
-        sections={sections} 
-        completionStats={completionStats}
-        activeSection={activeSection}
-        onSectionClick={setActiveSection}
-      />
+    <div className="flex h-screen flex-col md:flex-row">
+      {/* Sidebar navigation - hidden by default on mobile, shown when isSidebarOpen is true */}
+      <div className={`${isSidebarOpen ? 'block' : 'hidden'} md:block fixed md:relative z-40 h-screen w-full md:w-64`}>
+        <SideNavigation 
+          sections={sections} 
+          completionStats={completionStats}
+          activeSection={activeSection}
+          onSectionClick={handleSectionClick}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+      </div>
       
       <div className="flex flex-1 flex-col">
-        {/* Top navigation bar with submit button */}
+        {/* Top navigation bar with submit button and mobile menu toggle */}
         <TopNavigation 
           isSubmitting={isSubmitting} 
           canSubmit={canSubmit}
+          onMenuToggle={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
         />
         
         {/* Main content area with the survey form */}
         <main className="flex flex-1 overflow-y-auto bg-[#2e026d] pt-16">
           <form 
             id="survey-form" 
-            className="w-[calc(100%-24rem)] space-y-8 p-8"
+            className="w-full md:w-[calc(100%-24rem)] space-y-8 p-4 md:p-8"
             onSubmit={handleSubmit}
           >
             {/* Only show the currently active section */}
@@ -129,7 +164,7 @@ export default function App(props) {
                   id={section.id}
                   title={section.title}
                   questions={section.questions} 
-                  onHelpClick={setTooltipMessage}
+                  onHelpClick={handleHelpClick}
                   onRadioChange={(questionId, value) => {
                     handleRadioChange(section.id, questionId, value);
                   }}
@@ -138,7 +173,11 @@ export default function App(props) {
           </form>
           
           {/* Help tooltip that displays contextual help information */}
-          <Tooltip message={tooltipMessage} />
+          <Tooltip 
+            message={tooltipMessage} 
+            isVisible={isMobileTooltipVisible}
+            onClose={closeMobileTooltip}
+          />
         </main>
       </div>
     </div>

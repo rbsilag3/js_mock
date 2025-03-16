@@ -3,7 +3,8 @@
  * 
  * This component renders an individual survey section with its questions.
  * Each section has a unique visual style, title, and a set of questions with Likert scale ratings.
- * 
+ * The component is fully responsive for both desktop and mobile devices.
+ * CONTAINS MOBILE MOBILE VIEW * 
  * @param {string} id - Unique identifier for the section
  * @param {string} title - Title of the section
  * @param {Array} questions - Array of question objects for this section
@@ -11,6 +12,7 @@
  * @param {Function} onRadioChange - Callback function when a radio button is changed
  */
 import QuestionRow from './QuestionRow';
+import QuestionMark from './QuestionMark';
 
 export default function SurveySection({ id, title, questions, onHelpClick, onRadioChange }) {
   // Likert scale options for the radio buttons (1-5 rating)
@@ -67,15 +69,15 @@ export default function SurveySection({ id, title, questions, onHelpClick, onRad
 
   return (
     // Container for each survey section with unique ID for navigation
-    <section id={id} className={`rounded-xl p-8 ${sectionVisual.color}`}>
+    <section id={id} className={`rounded-xl p-4 md:p-8 ${sectionVisual.color}`}>
       {/* Section title with icon */}
-      <h2 className="mb-6 flex items-center text-2xl font-bold text-white">
-        <span className="mr-2 text-3xl">{sectionVisual.icon}</span>
+      <h2 className="mb-4 md:mb-6 flex items-center text-xl md:text-2xl font-bold text-white">
+        <span className="mr-2 text-2xl md:text-3xl">{sectionVisual.icon}</span>
         {title}
       </h2>
 
       {/* Section visual image */}
-      <div className="mb-6 h-32 w-full overflow-hidden rounded-lg bg-white/5 shadow-lg">
+      <div className="mb-4 md:mb-6 h-24 md:h-32 w-full overflow-hidden rounded-lg bg-white/5 shadow-lg">
         <img 
           src={sectionVisual.image} 
           alt={`${title} visual`} 
@@ -83,8 +85,8 @@ export default function SurveySection({ id, title, questions, onHelpClick, onRad
         />
       </div> 
         
-      {/* Questions table */}
-      <div className="space-y-4">
+      {/* Questions table - desktop view */}
+      <div className="hidden md:block space-y-4">
         <table className="w-full">
           {/* Table header with Likert scale options */}
           <thead>
@@ -112,6 +114,44 @@ export default function SurveySection({ id, title, questions, onHelpClick, onRad
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Questions list - mobile view */}
+      <div className="md:hidden space-y-6">
+        {questions.map((question) => (
+          <div key={question.id} className="bg-white/5 p-4 rounded-lg">
+            <div className="flex items-start mb-3">
+              <div className="flex-1 text-white font-medium">{question.text}</div>
+              {question.helpText && (
+                <QuestionMark onClick={() => onHelpClick(question.helpText)} />
+              )}
+            </div>
+            
+            {/* Likert scale for mobile */}
+            <div className="flex justify-between mb-3">
+              {likertOptions.map((option) => (
+                <label key={option} className="flex flex-col items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name={question.id}
+                    value={option}
+                    onChange={(e) => onRadioChange(question.id, e.target.value)}
+                    className="appearance-none h-8 w-8 rounded-full border-2 border-[hsl(280,100%,70%)] bg-transparent checked:border-4 checked:bg-[hsl(280,100%,70%)] hover:border-[hsl(280,100%,80%)] transition-all cursor-pointer"
+                  />
+                  <span className="mt-1 text-xs text-white text-center">{option}</span>
+                </label>
+              ))}
+            </div>
+            
+            {/* Comments field for mobile */}
+            <textarea
+              id={`${question.id}-comment`}
+              placeholder="Comments (optional)"
+              className="w-full p-2 rounded bg-white/10 text-white placeholder-white/50 text-sm"
+              rows="2"
+            ></textarea>
+          </div>
+        ))}
       </div>
     </section>
   );

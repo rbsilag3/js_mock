@@ -37,7 +37,7 @@ survey-form-sharepoint/
 
 ### Prerequisites
 
-- Node.js (v16+)
+- Node.js (LTS v18).
 - npm or yarn
 
 ### Installation

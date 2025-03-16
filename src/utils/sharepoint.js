@@ -1,5 +1,5 @@
 import { sharepointConfig } from '../../sharepoint.config';
-
+//AI generated code. Modify as needed.
 export const saveSurveyResponse = async (responseData) => {
   try {
     const response = await fetch(`${sharepointConfig.siteUrl}/_api/web/lists/getbytitle('${sharepointConfig.listName}')/items`, {

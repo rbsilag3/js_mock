@@ -13,6 +13,7 @@ export default function SurveyForm() {
   // Custom hook for managing survey state and radio button changes
   const { sections, handleRadioChange, completionStats, activeSection, setActiveSection, answers } = useSurveyForm(initialSections);
 
+// UNUSED CODE CONVERSION TO CSV ==========================================================
   const handleExport = () => {
     // Create workbook data
     const workbookData = sections.map((section) => {
@@ -46,7 +47,7 @@ export default function SurveyForm() {
     link.click();
     document.body.removeChild(link);
   };
-
+// UNUSED CODE ===========================================================================================
   return (
     <div className="flex h-screen">
       {/* Left sidebar navigation showing section completion status */}
