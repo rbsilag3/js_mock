@@ -3,7 +3,7 @@
  * 
  * This component displays help information in two different ways:
  * - On desktop: A sidebar on the right side of the screen
- * - On mobile: A small popup at the bottom of the screen that can be dismissed
+ * - On mobile: A compact popup that appears when help is requested
  * 
  * @param {string} message - The message to display in the tooltip
  * @param {boolean} isVisible - Whether the mobile tooltip is visible
@@ -20,22 +20,34 @@ export default function Tooltip({ message, isVisible, onClose }) {
         </div>
       </div>
       
-      {/* Mobile tooltip (bottom popup) - only shown when isVisible is true */}
+      {/* Mobile tooltip (popup) - only shown when isVisible is true */}
       {isVisible && (
-        <div className="md:hidden fixed bottom-4 left-4 right-4 bg-[#1a1744] rounded-lg p-4 shadow-lg z-50 animate-fade-in">
-          <div className="flex justify-between items-start">
-            <p className="text-sm text-white">{message}</p>
-            <button 
-              className="ml-2 text-white/70 hover:text-white"
-              onClick={onClose}
-              aria-label="Close help"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+        <>
+          {/* Semi-transparent overlay */}
+          <div 
+            className="md:hidden fixed inset-0 bg-black/50 z-40 animate-fade-in"
+            onClick={onClose}
+          ></div>
+          
+          {/* Popup content */}
+          <div className="md:hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[85%] bg-[#1a1744] rounded-lg p-5 shadow-lg z-50 animate-popup-in">
+            <div className="flex flex-col">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-semibold text-white">Help</h3>
+                <button 
+                  className="text-white/70 hover:text-white"
+                  onClick={onClose}
+                  aria-label="Close help"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-sm text-white">{message}</p>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
