@@ -36,7 +36,7 @@ export default function DonutChart({ completed, total }) {
           
           {/* Progress circle */}
           <circle
-            className="text-[hsl(280,100%,70%)] transition-all duration-1000 ease-in-out"
+            className="text-[hsl(56, 88.70%, 58.20%)] transition-all duration-1000 ease-in-out"
             stroke="currentColor"
             fill="transparent"
             strokeWidth={strokeWidth}
